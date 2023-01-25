@@ -1,7 +1,7 @@
 # xirr_lite
 
 xirr_lite contains a number of example implimentation of a xirr which function in python either with or without dependencies.
-This example MIGHT be useful if you are seeking a zero dependency solution OR if you already have numpy as a dependency and are seeking to avoid adding others.
+This example MIGHT be useful if you are seeking a zero dependency solution OR if you already have numpy as a dependency and are seeking to avoid adding others. Rather that install xirr_lite, the best result probably comes from directly copying an implimentation.
 
 
 ## Installation & Usage

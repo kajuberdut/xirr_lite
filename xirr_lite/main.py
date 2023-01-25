@@ -6,15 +6,9 @@ Thank you https://github.com/peliot for secant_method, xnpv, and xirr.
 
 import datetime
 
-try:
-    from xirr_lite.newton import optimize
+TOLERANCE = 0.0001
 
-    USE_NEWTON = True
-except ImportError:
-    USE_NEWTON = False
-
-
-def secant_method(tol, f, x0):
+def secant_method(f, x0, tol=TOLERANCE):
     """
     Solve for x where f(x)=0, given starting x0 and tolerance.
 
@@ -40,6 +34,15 @@ def secant_method(tol, f, x0):
     return x1
 
 
+try:
+    from xirr_lite.newton import newton
+
+    condenser = newton
+
+except ImportError:
+    condenser = secant_method
+
+
 def xnpv(rate, cashflows):
     """
     Calculate the net present value of a series of cashflows at irregular intervals.
@@ -63,7 +66,7 @@ def xnpv(rate, cashflows):
     return sum([cf / (1 + rate) ** ((t - t0).days / 365.0) for (t, cf) in chron_order])
 
 
-def xirr(cashflows, guess=0.1):
+def xirr(cashflows, guess=0.1, condenser=condenser):
     """
     Calculate the Internal Rate of Return of a series of cashflows at irregular intervals.
     Arguments
@@ -80,7 +83,4 @@ def xirr(cashflows, guess=0.1):
     * This function is equivalent to the Microsoft Excel function of the same name.
     * For users that do not have the scipy module installed, there is an alternate version (commented out) that uses the secant_method function defined in the module rather than the scipy.optimize module's numerical solver. Both use the same method of calculation so there should be no difference in performance, but the secant_method function does not fail gracefully in cases where there is no solution, so the scipy.optimize.newton version is preferred.
     """
-    if USE_NEWTON:
-        return optimize.newton(lambda r: xnpv(r, cashflows), guess)
-    else:
-        return secant_method(0.0001, lambda r: xnpv(r, cashflows), guess)
+    return condenser(lambda r: xnpv(r, cashflows), guess)
