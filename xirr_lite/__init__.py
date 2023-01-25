@@ -1,0 +1,1 @@
+from xirr_lite.main import xirr
