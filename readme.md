@@ -17,12 +17,27 @@ Or, to also install Numpy for faster and more robust array methods:
 
 ### Usage
 ``` python
+import datetime
+
 from xirr_lite import xirr
 
+    def mdt(iso_fmt: str) -> datetime.datetime:
+        return datetime.datetime.fromisoformat(iso_fmt)
 
-print(xirr(
-    # TBD
-))
+    result = xirr(
+        [
+            (mdt("2020-01-01"), -5000),
+            (mdt("2020-04-07"), 500),
+            (mdt("2020-08-05"), 500),
+            (mdt("2020-09-01"), 500),
+            (mdt("2020-12-01"), 1000),
+            (mdt("2021-01-02"), 1000),
+            (mdt("2021-04-05"), 1000),
+            (mdt("2021-08-09"), 1500),
+        ]
+    )
+    print(result)
+    # 0.19069352136108342
 
 ```
 
